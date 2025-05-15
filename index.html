@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -558,6 +559,7 @@
                 this.raycaster = new THREE.Raycaster();
                 this.mouse = new THREE.Vector2();
                 window.addEventListener('click', (event) => this.onGoldFoilClick(event));
+                window.addEventListener('touchstart', (event) => this.onGoldFoilTouch(event));
                 
                 // Detector
                 const detectorGeometry = new THREE.CylinderGeometry(
@@ -603,9 +605,18 @@
             }
 
             onGoldFoilClick(event) {
-                // Calculate mouse position in normalized device coordinates
-                this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-                this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                this.handleGoldFoilInteraction(event.clientX, event.clientY);
+            }
+
+            onGoldFoilTouch(event) {
+                const touch = event.touches[0];
+                this.handleGoldFoilInteraction(touch.clientX, touch.clientY);
+            }
+
+            handleGoldFoilInteraction(clientX, clientY) {
+                // Calculate touch/mouse position in normalized device coordinates
+                this.mouse.x = (clientX / window.innerWidth) * 2 - 1;
+                this.mouse.y = -(clientY / window.innerHeight) * 2 + 1;
 
                 // Update the raycaster
                 this.raycaster.setFromCamera(this.mouse, this.camera);
